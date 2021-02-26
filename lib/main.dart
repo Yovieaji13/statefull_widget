@@ -4,9 +4,28 @@ import 'package:flutter/services.dart';
 void main() {
  runApp(MyApp());
 }
-  class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+  class MyApp extends StatefulWidget {
   @override
+      State<StatefulWidget> createState() => _MyAppState();
+  }
+
+  class _MyAppState extends State<MyApp> {
+    double input = 0;
+    double kelvin = 0;
+    double reamur = 0;
+    final inputController = TextEditingController();
+
+    void inputRumus(){
+       setState(() {
+          input = double.parse(inputController.text);
+          kelvin = input + 273;
+          reamur = (4/5) * input;
+        }
+      );
+    }
+    
+    @override
     Widget build(BuildContext context) {
       return MaterialApp(
       title: 'Flutter Demo',
@@ -24,25 +43,17 @@ void main() {
           child: Column(
             children: [
             TextFormField(
-                keyboardType: TextInputType.numberWithOptions(
-                  decimal: true,
-                  signed: false
-                ),
-
-                // controller: suhuController,
+              controller: inputController,
                 decoration: InputDecoration(
                   hintText: "Masukkan Suhu Dalam Celcius",
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9+\,]'))
                 ],
-                
-            //     validator: (value){
-            //       if(value.isEmpty){
-            //         return 'Harus inputkan angka';
-            //     }
-            //     return null;
-            //  },
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: false
+                ),
             ),
 
             Expanded(
@@ -53,7 +64,8 @@ void main() {
                     child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Suhu dalam Kelvin"), Text("150")
+                      Text("Suhu dalam Kelvin"), 
+                      Text("$kelvin"),
                     ],),
                     margin: EdgeInsets.all(8),
                   ),
@@ -62,23 +74,29 @@ void main() {
                     child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Suhu dalam Reamur"), Text("150")
+                      Text("Suhu dalam Reamur"), 
+                      Text("$reamur")
                     ],),
                     margin: EdgeInsets.all(8),
                   ),
                 ],
               ) 
             ),
-
+          
             RaisedButton(
-            color: Colors.blue,
-              onPressed: (){},
-              child: Text('Konversi Suhu', style: TextStyle(color: Colors.white),),
-            ),
-          ],)
+              color: Colors.blue,
+                onPressed: inputRumus,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Konversi Suhu', style: TextStyle(color: Colors.white ),),
+                ],) 
+              ),
+            ],)
+          ),
         ),
-      ),
-    );
+      );
+    } 
   }
-}
+
 
